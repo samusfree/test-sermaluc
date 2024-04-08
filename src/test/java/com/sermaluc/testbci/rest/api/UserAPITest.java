@@ -18,7 +18,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.bind.support.WebExchangeBindException;
 import org.springframework.web.server.ServerWebInputException;
 
 import java.io.IOException;
@@ -31,7 +30,6 @@ import static org.mockito.ArgumentMatchers.any;
 public class UserAPITest {
     private UserService userService;
     private MockMvc client;
-    private UserAPI userAPI;
     private ObjectMapper objectMapper;
 
 
@@ -41,7 +39,7 @@ public class UserAPITest {
                 .findAndAddModules()
                 .build();
         userService = Mockito.mock();
-        userAPI = new UserAPI(userService);
+        UserAPI userAPI = new UserAPI(userService);
         client = MockMvcBuilders.standaloneSetup(userAPI).setControllerAdvice(RestResponseEntityExceptionHandler.class)
                 .build();
     }
