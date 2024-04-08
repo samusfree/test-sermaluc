@@ -1,4 +1,4 @@
-# Mi solución para el Test de [Sermaluc](https://www.nisum.com/es/inicio) 💪
+# Mi solución para el Test de [Sermaluc](https://www.sermaluc.com/home) 💪
 
 ### Indice
 
@@ -68,7 +68,7 @@ Desarrolle una aplicación que exponga una API RESTful de creación de usuarios.
 2. Instalar java 17 (con SDK Man o desde instalador)
 3. Dentro del repo en la consola ejecutar `./gradlew test` para correr los unit test del proyecto (macos / linux) / `gradlew.bat test` (windows)
 4. Dentro del repo en la consola ejecutar `./gradlew spring-boot:run` para iniciar la APP / `gradlew.bat spring-boot:run` (windows). El proyecto corre por defecto en el puerto 8080.
-5. Usar la colección de Postman para probar [Postman collection](readme-files/Nisum.postman_collection.json) dentro de el esta el endpoint para probar y los ejemplos para probar los casos de excepción.
+5. Usar la colección de Postman para probar [Postman collection](readme-files/sermaluc-sgonzales.postman_collection.json) dentro de el esta el endpoint para probar y los ejemplos para probar los casos de excepción.
 6. Asimismo se puede acceder al swagger-ui [Swagger UI](http://localhost:8080/swagger-doc/swagger-ui/index.html)
 
 ## Test evidences

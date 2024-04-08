@@ -31,7 +31,7 @@ public class JWTServiceImpl implements JWTService {
 
         return Jwts
                 .builder()
-                .setId("NisumJWT")
+                .setId("TestBCIJWT")
                 .setSubject(user.email())
                 .claim("authorities",
                         grantedAuthorities.stream()
