@@ -27,7 +27,6 @@ public class SecurityConfig {
     private UserRepository userRepository;
     @Autowired
     private JWTFilter jwtFilter;
-
     @Autowired
     UserMapper userMapper;
 

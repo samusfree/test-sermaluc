@@ -5,6 +5,7 @@ import com.sermaluc.testbci.data.repository.PhoneRepository;
 import com.sermaluc.testbci.data.repository.UserRepository;
 import com.sermaluc.testbci.dto.UserDTO;
 import com.sermaluc.testbci.dto.UserRequestDTO;
+import com.sermaluc.testbci.exception.BusinessValidationException;
 import com.sermaluc.testbci.exception.EmailExistsException;
 import com.sermaluc.testbci.mappers.UserMapper;
 import com.sermaluc.testbci.service.impl.UserServiceImpl;
@@ -19,6 +20,7 @@ import java.util.Optional;
 import static com.sermaluc.testbci.utils.CreateObjectsUtil.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 
 public class UserServiceTest {
@@ -33,7 +35,9 @@ public class UserServiceTest {
         PhoneRepository phoneRepository = Mockito.mock();
         jwtService = Mockito.mock();
         userMapper = new UserMapper();
-        userService = new UserServiceImpl(userRepository, phoneRepository, userMapper, jwtService);
+        String passwordRegexpValidation = "^(?=.*?\\d.*\\d)(?=\\w*[A-Z])(?=\\w*[a-z])\\S{8,16}$";
+        String passwordExceptionMessage = "Password must have at least one upper case letter, one lower case letter and two numbers. Also, the size must be between 8 and 16";
+        userService = new UserServiceImpl(userRepository, phoneRepository, userMapper, jwtService, passwordRegexpValidation, passwordExceptionMessage);
     }
 
     @DisplayName("Create user")
@@ -48,6 +52,20 @@ public class UserServiceTest {
         Assertions.assertEquals(expected.name(), response.name());
         Assertions.assertEquals(expected.email(), response.email());
         Assertions.assertEquals(expected.phones().size(), 1);
+    }
+
+    @DisplayName("Create user with wrong password")
+    @Test()
+    void testCreateUserWrongPassword() {
+        UserRequestDTO userRequestDTO = getUserRequestDTOWithWrongPassword();
+        Exception exception = assertThrows(BusinessValidationException.class, () -> {
+            userService.createUser(userRequestDTO);
+        });
+
+        String expectedMessage = "Password must have at least one upper case letter, one lower case letter and two numbers. Also, the size must be between 8 and 16";
+        String actualMessage = exception.getMessage();
+
+        assertTrue(actualMessage.contains(expectedMessage));
     }
 
     @DisplayName("Email Already Exists")

@@ -20,7 +20,7 @@
 
 ## Descripción
 
-<p align="justify">
+<p>
 Desarrolle una aplicación que exponga una API RESTful de creación de usuarios.
 
 ![Descripcion del challange](readme-files/descripcion.png)

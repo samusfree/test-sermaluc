@@ -17,6 +17,10 @@ public class CreateObjectsUtil {
         return new UserRequestDTO("test", "test@gmail.com", "Samus123", List.of(getPhoneDTO()));
     }
 
+    public static UserRequestDTO getUserRequestDTOWithWrongPassword() {
+        return new UserRequestDTO("test", "test@gmail.com", "31", List.of(getPhoneDTO()));
+    }
+
     public static UserDTO getUserDTO() {
         return new UserDTO(UUID.randomUUID(), "test", "test@gmail.com", "Samus123", LocalDate.now(),
                 null, LocalDate.now(), "ddsddsdsdsd", true, List.of(getPhoneDTO()));

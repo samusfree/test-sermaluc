@@ -1,6 +1,7 @@
 package com.sermaluc.testbci.rest.exception;
 
 import com.sermaluc.testbci.dto.ResponseError;
+import com.sermaluc.testbci.exception.BusinessValidationException;
 import com.sermaluc.testbci.exception.EmailExistsException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -49,6 +50,15 @@ public class RestResponseEntityExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({ServerWebInputException.class})
     public ResponseError notBody(
+            ServerWebInputException ex) {
+        log.info(ex.getClass().getCanonicalName());
+        log.error(ex.getReason());
+        return mapErrorFromException(ex);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler({ BusinessValidationException.class})
+    public ResponseError businessValidationException(
             ServerWebInputException ex) {
         log.info(ex.getClass().getCanonicalName());
         log.error(ex.getReason());
