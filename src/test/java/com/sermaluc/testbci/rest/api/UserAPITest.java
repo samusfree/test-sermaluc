@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.sermaluc.testbci.dto.ResponseError;
 import com.sermaluc.testbci.dto.UserDTO;
 import com.sermaluc.testbci.dto.UserRequestDTO;
+import com.sermaluc.testbci.exception.BusinessValidationException;
 import com.sermaluc.testbci.exception.EmailExistsException;
 import com.sermaluc.testbci.rest.exception.RestResponseEntityExceptionHandler;
 import com.sermaluc.testbci.service.UserService;
@@ -24,6 +25,7 @@ import java.io.IOException;
 
 import static com.sermaluc.testbci.utils.CreateObjectsUtil.getUserDTO;
 import static com.sermaluc.testbci.utils.CreateObjectsUtil.getUserRequestDTO;
+import static com.sermaluc.testbci.utils.CreateObjectsUtil.getUserRequestDTOWithWrongPassword;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 
@@ -63,16 +65,25 @@ public class UserAPITest {
     @Test
     public void testInvalidRequest() throws Exception {
         UserRequestDTO userRequestDTO = new UserRequestDTO("", "", "", null);
-        UserDTO userDTO = getUserDTO();
+        MvcResult mvcResult = client.perform(MockMvcRequestBuilders.post("/api/v1/users")
+                .contentType(MediaType.APPLICATION_JSON_VALUE).content(mapToJson(userRequestDTO))).andReturn();
+        ResponseError response = mapFromJson(mvcResult.getResponse().getContentAsString(), ResponseError.class);
+        assertEquals(HttpStatus.BAD_REQUEST.value(), mvcResult.getResponse().getStatus());
+        assertEquals(3, response.detailedMessages().size());
+    }
+
+    @Test
+    public void testInvalidPassword() throws Exception {
+        UserRequestDTO userRequestDTO = getUserRequestDTOWithWrongPassword();
         Mockito.when(userService.createUser(any()))
-                .thenReturn(userDTO);
+                .thenThrow(new BusinessValidationException("wrong password"));
 
         MvcResult mvcResult = client.perform(MockMvcRequestBuilders.post("/api/v1/users")
                 .contentType(MediaType.APPLICATION_JSON_VALUE).content(mapToJson(userRequestDTO))).andReturn();
 
         ResponseError response = mapFromJson(mvcResult.getResponse().getContentAsString(), ResponseError.class);
         assertEquals(HttpStatus.BAD_REQUEST.value(), mvcResult.getResponse().getStatus());
-        assertEquals(4, response.detailedMessages().size());
+        assertEquals("wrong password", response.message());
     }
 
     @Test

@@ -59,9 +59,9 @@ public class RestResponseEntityExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({ BusinessValidationException.class})
     public ResponseError businessValidationException(
-            ServerWebInputException ex) {
+            BusinessValidationException ex) {
         log.info(ex.getClass().getCanonicalName());
-        log.error(ex.getReason());
+        log.error(ex.getMessage());
         return mapErrorFromException(ex);
     }
 
